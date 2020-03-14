@@ -12,11 +12,13 @@ const provider = require('./scripts/painting-provider.js');
 // root endpoint will retrieve all paintings
 app.get("/",(req,resp)=>{
     provider.retrievePaintings(req,resp);
-})
+});
 
 
 // this endpoint will retrieve single painting
-app.get
+app.get("/:id", (req, resp) => {
+    provider.retrieveSinglePainting(req, resp);
+});
 
 
 
