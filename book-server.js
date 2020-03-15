@@ -23,17 +23,42 @@ require('./handlers/dataConnector.js').connect();
 
 //create an express app
 const app = express();
-const Book = require('./models/Book');
+/* middleware section */ 
+
+//view ware section
+
+app.set('views','./views');
+app.set('view engine','pug');
+
+// serves up static files from the public folder
+app.use(express.static('public'));
+//also add a path to static
+app.use('/static',express.static('public'));
+
+//convert raw requests into usable data
 app.use(parser.json());
-app.use(parser.urlencoded({extended: true}));
-// use the route handlers
-const bookRouter = require('./handlers/bookRouter.js');
-bookRouter.handleAllBooks(app, Book);
-bookRouter.handleSingleBook(app, Book);
-bookRouter.handleBooksByPageRange(app,Book);
-bookRouter.handleAllCategories(app,Book);
+app.use(parser.urlencoded({extended:true}));
+
+
+
+const Book = require('./models/Book');
+    
+    // use the route handlers
+    const bookRouter = require('./handlers/bookRouter.js');
+    bookRouter.handleAllBooks(app, Book);
+    bookRouter.handleSingleBook(app, Book);
+    bookRouter.handleBooksByPageRange(app,Book);
+    bookRouter.handleAllCategories(app,Book);
+    bookRouter.handleCreateBook(app,Book);
+    bookRouter.handlePageIndex(app,Book);
+    bookRouter.handlePageBooks(app,Book);
+
+// customize the 404 error with our own middleware function
+app.use(function(req,resp,next){
+    resp.status(404).send("Sorry can't find that!")
+});
 
 let port = 8080;
 app.listen(port, function () {
-console.log("Server running at port= " + port);
+    console.log("Server running at port= " + port)
 });
