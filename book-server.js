@@ -52,6 +52,7 @@ const Book = require('./models/Book');
     bookRouter.handleCreateBook(app,Book);
     bookRouter.handlePageIndex(app,Book);
     bookRouter.handlePageBooks(app,Book);
+    bookRouter.handlePageSingleBook(app,Book);
 
 // customize the 404 error with our own middleware function
 app.use(function(req,resp,next){

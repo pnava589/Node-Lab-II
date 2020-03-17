@@ -1,11 +1,11 @@
 extends layout.pug
 
 block content
-    h1 List of Books
+    h1 Countries with photos
     div.booklist
-        each book in bookData
+        each book in ImageData
             div
-                a(href=`/site/book/${book.isbn10}`)
-                    img(src=`/book-images/${book.isbn10}.jpg` width='100')
-            div
-                h3=book.title
+                a(href=`/travel/photos/${book._id}`)
+                   div=book._id+`[${book.count}]`
+            br
+                

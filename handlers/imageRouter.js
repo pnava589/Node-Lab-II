@@ -60,10 +60,69 @@ const handleSingleImage = (app,Image) =>{
             
             };
 
+//for root requests, render the index.pug view
+const handlePageIndex = (app,Image) => {
+    app.route('/')
+        .get(function(req,resp){
+            resp.render('index',{title: 'Node 2 Lab',heading: 'Sample Pug File'})
+        });
+}
+
+const handlePageCountries = (app, Image) => {
+        app.route('/travel')
+        .get(function (req,resp) {
+            Image.aggregate([
+            {$group:{_id:"$location.country",id:{$first:"$id"},count:{$sum:1}}}],
+            (err, data) =>{
+            if (err) {
+                resp.render('error', { page: 'travel'});
+            } else {
+                console.log(data);
+                resp.render('list', { ImageData: data });
+                }
+            });
+        });
+    };
+
+    const handlePageImages = (app, Image) => {
+        app.route('/travel/photos/:country')
+        .get(function (req,resp) {
+            Image.find().where('location.country')
+            .eq(req.params.country)
+            .exec(function (err, data) {
+            if (err) {
+                resp.render('error', { page: 'travel/photos/'});
+            } 
+            else {
+                console.log(data);
+                resp.render('Images', { ImageData: data });
+                }
+            });
+        });
+    };
+
+    const handlePageSingleImage = (app, Image) => {
+        app.route('/travel/photo/:id')
+        .get(function (req,resp) {
+            Image.find({id: req.params.id}, (err, data) => {
+            if (err) {
+                resp.render('error', { page: 'travel/photo'});
+            } else {
+                resp.render('image', { ImageData: data[0] });
+            }
+         });
+      });
+    };
+
+
 module.exports={
     handleAllImages,
     handleSingleImage,
     handleSingleImageByCity,
-    handleImagesByCountry
-
+    handleImagesByCountry,
+    handlePageIndex,
+    handlePageCountries,
+    handlePageImages,
+    handlePageSingleImage
 };
+

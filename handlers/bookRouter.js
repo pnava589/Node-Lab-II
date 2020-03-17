@@ -116,6 +116,19 @@ const handlePageBooks = (app, Book) => {
         });
     };
 
+    const handlePageSingleBook = (app, Book) => {
+        app.route('/site/book/:isbn')
+        .get(function (req,resp) {
+            Book.find({isbn10: req.params.isbn}, (err, data) => {
+            if (err) {
+                resp.render('error', { page: 'site/book'});
+            } else {
+                resp.render('book', { bookData: data[0] });
+            }
+         });
+      });
+    };
+
 
 module.exports={
     handleAllBooks,
@@ -124,5 +137,6 @@ module.exports={
     handleAllCategories,
     handleCreateBook,
     handlePageBooks,
-    handlePageIndex
+    handlePageIndex,
+    handlePageSingleBook
 };
