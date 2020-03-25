@@ -33,8 +33,9 @@ app.use('/static',express.static('public'));
 
 app.set('views','./views');
 app.set('view engine','pug');
-
+/* ------------------------ Images ------------------------------------------------------ */ 
 const Image = require('./models/Image');
+
 app.use(parser.json());
 app.use(parser.urlencoded({extended: true}));
 // use the route handlers
@@ -43,12 +44,29 @@ imageRouter.handleAllImages(app, Image);
 imageRouter.handleSingleImage(app,Image);
 imageRouter.handleSingleImageByCity(app,Image);
 imageRouter.handleImagesByCountry(app,Image);
-//imageRouter.handleCreateImage(app,Image);
 imageRouter.handlePageIndex(app,Image);
 imageRouter.handlePageCountries(app,Image);
 imageRouter.handlePageImages(app,Image);
 imageRouter.handlePageSingleImage(app,Image);
+/* ----------------------------------------------------------------------------------- */ 
 
+
+/* ------------------------ Books ------------------------------------------------------ */ 
+
+const Book = require('./models/Book');
+    
+    // use the route handlers
+    const bookRouter = require('./handlers/bookRouter.js');
+    bookRouter.handleAllBooks(app, Book);
+    bookRouter.handleSingleBook(app, Book);
+    bookRouter.handleBooksByPageRange(app,Book);
+    bookRouter.handleAllCategories(app,Book);
+    bookRouter.handleCreateBook(app,Book);
+    bookRouter.handlePageIndex(app,Book);
+    bookRouter.handlePageBooks(app,Book);
+    bookRouter.handlePageSingleBook(app,Book);
+
+/* ----------------------------------------------------------------------------------- */
 
 let port = 8080;
 app.listen(port, function () {

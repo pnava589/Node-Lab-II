@@ -72,7 +72,7 @@ const handlePageCountries = (app, Image) => {
         app.route('/travel')
         .get(function (req,resp) {
             Image.aggregate([
-            {$group:{_id:"$location.country",id:{$first:"$id"},count:{$sum:1}}}],
+            {$group:{_id:"$location.country",id:{$first:"$id"},count:{$sum:1}}},{$sort:{_id:1}}],
             (err, data) =>{
             if (err) {
                 resp.render('error', { page: 'travel'});
@@ -114,6 +114,32 @@ const handlePageCountries = (app, Image) => {
       });
     };
 
+    const handlePageBooks = (app, Book) => {
+        app.route('/site/list')
+        .get(function (req,resp) {
+            Book.find({}, function(err, data) {
+            if (err) {
+                resp.render('error', { page: 'site/list'});
+            } else {
+                resp.render('bookList', { bookData: data });
+                }
+            });
+        });
+    };
+
+    const handlePageSingleBook = (app, Book) => {
+        app.route('/site/book/:isbn')
+        .get(function (req,resp) {
+            Book.find({isbn10: req.params.isbn}, (err, data) => {
+            if (err) {
+                resp.render('error', { page: 'site/book'});
+            } else {
+                resp.render('book', { bookData: data[0] });
+            }
+         });
+      });
+    };
+
 
 module.exports={
     handleAllImages,
@@ -123,6 +149,8 @@ module.exports={
     handlePageIndex,
     handlePageCountries,
     handlePageImages,
-    handlePageSingleImage
+    handlePageSingleImage,
+    handlePageSingleBook,
+    handlePageBooks
 };
 
